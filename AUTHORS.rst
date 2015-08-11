@@ -5,9 +5,9 @@ Credits
 Development Lead
 ----------------
 
-* Felipe Alvarez <falvarez@ciudadanoi.org>
+* Guglielmo Celata <https://github.com/guglielmo>
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Felipe Alvarez <falvarez@ciudadanoi.org
