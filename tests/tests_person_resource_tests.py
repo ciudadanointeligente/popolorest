@@ -9,7 +9,7 @@ Tests for `popolorest` models module.
 """
 
 from django.test import TestCase
-from popolo.models import Person
+from popolo.models import Person, ContactDetail
 from popolorest.serializers import PersonSerializer
 import json
 from rest_framework.status import is_success
@@ -21,12 +21,20 @@ class PersonSerializerTestCase(TestCase):
 
     def test_serialize_person(self):
         person = Person.objects.create(name=u'Rita Levi-Montalcini')
+        person.add_contact_detail(contact_type=ContactDetail.CONTACT_TYPES.email,
+                                  value='rita@example.com',
+                                  label='email')
         serializer = PersonSerializer(person)
         self.assertEquals(serializer.data['name'], person.name)
+        self.assertIn('contact_details', serializer.data.keys())
+        self.assertEquals(len(serializer.data['contact_details']), 1)
+        self.assertEquals(serializer.data['contact_details'][0]['value'], 'rita@example.com')
+        self.assertEquals(serializer.data['contact_details'][0]['label'], 'email')
+        self.assertEquals(serializer.data['contact_details'][0]['type'], ContactDetail.CONTACT_TYPES.email)
 
     def test_get_the_persons_resource(self):
         person = Person.objects.create(name=u'Rita Levi-Montalcini')
-        url = '/persons.json'
+        url = '/persons/'
         response = self.client.get(url)
         self.assertTrue(is_success(response.status_code))
         response_object = json.loads(response.content)
