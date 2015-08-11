@@ -37,7 +37,7 @@ class PersonSerializerTestCase(TestCase):
         url = '/persons/'
         response = self.client.get(url)
         self.assertTrue(is_success(response.status_code))
-        response_object = json.loads(response.content)
+        response_object = json.loads(response.content.decode())
         self.assertIn('total', response_object.keys())
         self.assertIn('page', response_object.keys())
         self.assertIn('per_page', response_object.keys())
