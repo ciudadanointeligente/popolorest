@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from popolo.models import Person, ContactDetail
+from popolo.models import Person, ContactDetail, Membership
 
 
 class ContactDetailSerializer(serializers.ModelSerializer):
@@ -10,6 +10,11 @@ class ContactDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'value', 'label', 'type')
 
 
+class MembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Membership
+
+
 class ContactDetailedRelatedField(serializers.RelatedField):
     queryset = ContactDetail.objects.all()
 
@@ -18,9 +23,18 @@ class ContactDetailedRelatedField(serializers.RelatedField):
             serializer = ContactDetailSerializer(value)
             return serializer.data
 
+class MembershipRelatedField(serializers.RelatedField):
+    queryset = Membership.objects.all()
+
+    def to_representation(self, value):
+        if isinstance(value, Membership):
+            serializer = MembershipSerializer(value)
+            return serializer.data
+
 
 class PersonSerializer(serializers.ModelSerializer):
     contact_details = ContactDetailedRelatedField(many=True)
+    memberships = MembershipRelatedField(many=True)
 
     class Meta:
         model = Person
@@ -41,4 +55,5 @@ class PersonSerializer(serializers.ModelSerializer):
                   'summary',
                   'biography',
                   'national_identity',
-                  'contact_details',)
+                  'contact_details',
+                  'memberships',)

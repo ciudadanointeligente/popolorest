@@ -9,8 +9,8 @@ Tests for `popolorest` models module.
 """
 
 from django.test import TestCase
-from popolo.models import Person, ContactDetail
-from popolorest.serializers import PersonSerializer
+from popolo.models import Person, ContactDetail, Organization
+from popolorest.serializers import PersonSerializer, MembershipSerializer
 import json
 from rest_framework.status import is_success
 
@@ -45,3 +45,30 @@ class PersonSerializerTestCase(TestCase):
         self.assertIn('next_url', response_object.keys())
         self.assertIn('result', response_object.keys())
         self.assertEquals(response_object['result'][0]['name'], person.name)
+
+class MembershipSerializerTestCase(TestCase):
+    def setUp(self):
+        self.person = Person.objects.create(name=u'Rita Levi-Montalcini')
+        self.organization = Organization.objects.create(name=u"Scientists")
+        self.person.add_membership(self.organization)
+        self.membership = self.person.memberships.first()
+        self.membership.start_date = "2005-05-06"
+        self.membership.end_date=None
+        self.membership.label="Rita is a scientist"
+        self.membership.save()
+
+    def test_serializer_initialization(self):
+        serializer = MembershipSerializer(self.membership)
+        data = serializer.data
+        self.assertEquals(data['start_date'], self.membership.start_date)
+        self.assertIsNone(data['end_date'])
+        self.assertEquals(data['label'], self.membership.label)
+
+    def test_membership_in_person_serializer(self):
+        serializer = PersonSerializer(self.person)
+        self.assertIn('memberships', serializer.data.keys())
+        self.assertEquals(len(serializer.data['memberships']), 1)
+        self.assertEquals(serializer.data['memberships'][0]['start_date'], self.membership.start_date)
+        self.assertIsNone(serializer.data['memberships'][0]['end_date'])
+        self.assertEquals(serializer.data['memberships'][0]['label'], self.membership.label)
+
