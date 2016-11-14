@@ -1,4 +1,4 @@
-django>=1.5.1
+Django==1.9
 coverage
 coveralls
 mock>=1.0.1
@@ -7,7 +7,7 @@ tox>=1.7.0
 
 # Additional test requirements go here
 Markdown==2.6.2
-django-autoslug==1.8.0
+django-autoslug==1.9.3
 django-extensions==1.5.5
 django-filter==0.10.0
 django-model-utils==2.3.1
