@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from rest_framework import viewsets, routers
 from .views import PersonViewSet, OrganizationViewSet, MembershipViewSet, PostViewSet
 # Uncomment the next two lines to enable the admin:
