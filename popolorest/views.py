@@ -5,7 +5,7 @@ from popolorest.serializers import PersonSerializer
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.compat import OrderedDict
+from collections import OrderedDict
 # ViewSets define the view behavior.
 
 
