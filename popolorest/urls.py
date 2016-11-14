@@ -14,7 +14,7 @@ router.register(r'memberships', MembershipViewSet)
 router.register(r'posts', PostViewSet)
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'popolorest.views.home', name='home'),
     # url(r'^popolorest/', include('popolorest.foo.urls')),
@@ -28,4 +28,4 @@ urlpatterns = patterns('',
     # django-rest-frameworks urls
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-)
+]
